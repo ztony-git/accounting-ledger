@@ -88,7 +88,7 @@ public class FinancialTracker {
             while((line = reader.readLine()) != null) { // create and fill transactions arraylist with loaded .csv
                 String[] data = line.split("\\|");
 
-                LocalDate date = LocalDate.parse(data[0], DateTimeFormatter.ofPattern(DATETIME_PATTERN));
+                LocalDate date = LocalDate.parse(data[0], DateTimeFormatter.ofPattern(DATE_PATTERN));
                 LocalTime time = LocalTime.parse(data[1], DateTimeFormatter.ofPattern(TIME_PATTERN));
 
                 Transaction transaction = new Transaction(date, time, data[2], data[3], Double.parseDouble(data[4]));
