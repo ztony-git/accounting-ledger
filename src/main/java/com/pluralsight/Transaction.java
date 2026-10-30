@@ -62,6 +62,6 @@ public class Transaction {
     public String toCSV() {
         return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "|"
                 + time.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "|"
-                + description + "|" + vendor + "|" + amount + "\n";
+                + description + "|" + vendor + "|" + String.format("%.2f", amount) + "\n";
     }
 }
