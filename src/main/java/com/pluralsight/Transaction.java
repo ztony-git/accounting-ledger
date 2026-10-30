@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
     private LocalDate date;
@@ -59,6 +60,8 @@ public class Transaction {
     }
 
     public String toCSV() {
-        return date + "|" + time + "|" + description + "|" + vendor + "|" + amount + "\n";
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "|"
+                + time.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "|"
+                + description + "|" + vendor + "|" + amount + "\n";
     }
 }
