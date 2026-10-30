@@ -109,6 +109,43 @@ public class FinancialTracker {
        Add new transactions
        ------------------------------------------------------------------ */
 
+    private static Transaction addTransaction(Scanner scanner) {
+        // datetime
+        LocalDateTime dateTime = null;
+        while (dateTime == null) { // keep asking until correct format is followed
+            try {
+                System.out.print("Enter the date and time (yyyy-MM-dd HH:mm:ss): ");
+                dateTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern(DATETIME_PATTERN));
+            }  catch (Exception e) {
+                System.out.println("Invalid date and time: " + e.getMessage());
+            }
+        }
+        LocalDate date = dateTime.toLocalDate();
+        LocalTime time = dateTime.toLocalTime();
+
+        // description
+        System.out.print("Enter payment description: ");
+        String description = scanner.nextLine();
+
+        // vendor
+        System.out.print("Enter payment vendor: ");
+        String vendor = scanner.nextLine();
+
+        // amount
+        double amount;
+        do { // keep asking until transaction amount is positive
+            System.out.print("Enter transaction amount: ");
+            amount = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (amount <= 0) {
+                System.out.println("Must provide a positive amount.");
+            }
+        } while (amount <= 0);
+
+        return new Transaction(date, time, description, vendor, amount);
+    }
+
     /**
      * Prompt for ONE date+time string in the format
      * "yyyy-MM-dd HH:mm:ss", plus description, vendor, amount.
@@ -116,7 +153,6 @@ public class FinancialTracker {
      * Store the amount as-is (positive) and append to the file.
      */
     private static void addDeposit(Scanner scanner) {
-        // TODO
     }
 
     /**
