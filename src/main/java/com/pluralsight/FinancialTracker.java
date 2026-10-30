@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -81,6 +82,18 @@ public class FinancialTracker {
         //       and add it to the transactions list.
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
+
+            String line;
+
+            while((line = reader.readLine()) != null) { // create and fill transactions arraylist with loaded .csv
+                String[] data = line.split("\\|");
+
+                LocalDate date = LocalDate.parse(data[0]);
+                LocalTime time = LocalTime.parse(data[1]);
+
+                Transaction transaction = new Transaction(date, time, data[2], data[3], Double.parseDouble(data[4]));
+                transactions.add(transaction);
+            }
         } catch (Exception e) {
             try { // create .csv file
                 System.out.println("Attempting to make transactions.csv file...");
