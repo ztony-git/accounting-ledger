@@ -153,6 +153,9 @@ public class FinancialTracker {
      * Store the amount as-is (positive) and append to the file.
      */
     private static void addDeposit(Scanner scanner) {
+        Transaction transaction = addTransaction(scanner);
+        transactions.add(transaction);
+        appendTransaction(transaction);
     }
 
     /**
@@ -161,6 +164,10 @@ public class FinancialTracker {
      * then converted to a negative amount before storing.
      */
     private static void addPayment(Scanner scanner) {
+        Transaction transaction = addTransaction(scanner);
+        transaction.setAmount(-transaction.getAmount());
+        transactions.add(transaction);
+        appendTransaction(transaction);
     }
 
     /* ------------------------------------------------------------------
@@ -262,9 +269,9 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Utility
        ------------------------------------------------------------------ */
-    private static void appendTransaction(String fileName, Transaction transaction) {
+    private static void appendTransaction(Transaction transaction) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             writer.write(transaction.toCSV());
             writer.close();
         } catch (Exception e) {
