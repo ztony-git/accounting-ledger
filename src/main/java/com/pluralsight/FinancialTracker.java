@@ -161,7 +161,6 @@ public class FinancialTracker {
      * then converted to a negative amount before storing.
      */
     private static void addPayment(Scanner scanner) {
-        // TODO
     }
 
     /* ------------------------------------------------------------------
@@ -258,5 +257,18 @@ public class FinancialTracker {
     private static Double parseDouble(String s) {
         /* TODO – return Double   or null */
         return null;
+    }
+
+    /* ------------------------------------------------------------------
+       Utility
+       ------------------------------------------------------------------ */
+    private static void appendTransaction(String fileName, Transaction transaction) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            writer.write(transaction.toCSV());
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
