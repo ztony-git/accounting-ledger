@@ -1,16 +1,16 @@
 package com.pluralsight;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalTime;
+import java.time.LocalDate;
 
 public class Transaction {
-    private Date date;
-    private Time time;
+    private LocalDate date;
+    private LocalTime time;
     private String paymentName;
     private String vendor;
     private double amount;
 
-    public Transaction(Date date, Time time, String paymentName, String vendor, double amount) {
+    public Transaction(LocalDate date, LocalTime time, String paymentName, String vendor, double amount) {
         this.date = date;
         this.time = time;
         this.paymentName = paymentName;
@@ -18,19 +18,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public LocalDate getLocalDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setLocalDate(LocalDate date) {
         this.date = date;
     }
 
-    public Time getTime() {
+    public LocalTime getLocalTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setLocalTime(LocalTime time) {
         this.time = time;
     }
 
