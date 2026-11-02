@@ -3,8 +3,10 @@ package com.pluralsight;
 import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Scanner;
 
 /*
@@ -348,8 +350,8 @@ public class FinancialTracker {
        Custom Search
        ------------------------------------------------------------------ */
     private static void customSearchMenu(Scanner scanner) {
-        String[] dateConfig = {"2012-10-02", "", "Inclusive"};
-        String[] timeConfig = {"", "13:23:32", "Inclusive"};
+        String[] dateConfig = {"", "", "Inclusive"};
+        String[] timeConfig = {"", "", "Inclusive"};
         String[] descriptionConfig = {"", "Loose"};
         String[] vendorConfig = {"", "Loose"};
         String[] amountConfig = {"", "Greater Than"};
@@ -398,9 +400,11 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> {/* TODO – Start & End date, Inclusive v Exclusive */
+                case "1" -> { // Start & End date, Inclusive v Exclusive
+                    queryDate(scanner, dateConfig);
                 }
-                case "2" -> {/* TODO – Start & End time, Inclusive v Exclusive */
+                case "2" -> { // Start & End time, Inclusive v Exclusive
+                    queryTime(scanner, timeConfig);
                 }
                 case "3" -> {/* TODO – Description Strict vs Loose */
                 }
@@ -414,6 +418,68 @@ public class FinancialTracker {
         }
     }
 
+    private static void queryDate(Scanner scanner, String[] dateConfig) {
+        separator();
+        System.out.println("Editing date query:");
+
+        System.out.print("Start Date (yyyy-MM-dd): ");
+        String startDate = scanner.nextLine();
+        if (parseDate(startDate) == null) {
+            System.out.println("Invalid date");
+            return;
+        }
+
+        System.out.print("End Date (yyyy-MM-dd): ");
+        String endDate = scanner.nextLine();
+        if (parseDate(endDate) == null) {
+            System.out.println("Invalid date");
+            return;
+        }
+
+        System.out.print("Search Type (Inclusive/Exclusive): ");
+        String searchType = scanner.nextLine();
+        if (!searchType.equalsIgnoreCase("Inclusive") && !searchType.equalsIgnoreCase("Exclusive")) {
+            System.out.println("Invalid search type");
+            return;
+        }
+
+        System.out.println("Updating Date Query...");
+        dateConfig[0] = startDate;
+        dateConfig[1] = endDate;
+        dateConfig[2] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+    }
+
+    private static void queryTime(Scanner scanner, String[] timeConfig) {
+        separator();
+        System.out.println("Editing time query:");
+
+        System.out.print("Start Time (hh:mm:ss): ");
+        String startTime = scanner.nextLine();
+        if (parseTime(startTime) == null) {
+            System.out.println("Invalid time");
+            return;
+        }
+
+        System.out.print("End Time (hh:mm:ss): ");
+        String endTime = scanner.nextLine();
+        if (parseTime(endTime) == null) {
+            System.out.println("Invalid time");
+            return;
+        }
+
+        System.out.print("Search Type (Inclusive/Exclusive): ");
+        String searchType = scanner.nextLine();
+        if (!searchType.equalsIgnoreCase("Inclusive") && !searchType.equalsIgnoreCase("Exclusive")) {
+            System.out.println("Invalid search type");
+            return;
+        }
+
+        System.out.println("Updating Time Query...");
+        timeConfig[0] = startTime;
+        timeConfig[1] = endTime;
+        timeConfig[2] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+    }
+
     private static void customSearch(Scanner scanner) {
         // TODO – prompt for any combination of date range, description,
         //        vendor, and exact amount, then display matches
@@ -423,8 +489,21 @@ public class FinancialTracker {
        Utility parsers (you can reuse in many places)
        ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
-        /* TODO – return LocalDate or null */
-        return null;
+        try {
+            return LocalDate.parse(s, DateTimeFormatter.ofPattern(DATE_PATTERN));
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid Date: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private static LocalTime parseTime(String s) {
+        try {
+            return LocalTime.parse(s, DateTimeFormatter.ofPattern(TIME_PATTERN));
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid Time: " + e.getMessage());
+            return null;
+        }
     }
 
     private static Double parseDouble(String s) {
