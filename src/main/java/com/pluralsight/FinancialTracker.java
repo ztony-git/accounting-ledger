@@ -47,8 +47,10 @@ public class FinancialTracker {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
+        // customSearchMenu(scanner);
 
         while (running) {
+            seperator();
             System.out.println("Welcome to TransactionApp");
             System.out.println("Choose an option:");
             System.out.println("D) Add Deposit");
@@ -79,7 +81,7 @@ public class FinancialTracker {
      * • Each line looks like: date|time|description|vendor|amount
      */
     public static void loadTransactions(String fileName) {
-        // TODO: create file if it does not exist, then read each line,
+        //       create file if it does not exist, then read each line,
         //       parse the five fields, build a Transaction object,
         //       and add it to the transactions list.
         try {
@@ -180,6 +182,7 @@ public class FinancialTracker {
     private static void ledgerMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
+            seperator();
             System.out.println("Ledger");
             System.out.println("Choose an option:");
             System.out.println("A) All");
@@ -204,11 +207,16 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
+    private static void seperator() {
+        System.out.println("-----------------------------------------------------------------");
+    }
+
     private static void displayHeader() {
         System.out.printf("%-12s%-10s%-40s%-25s%s%n", "Date", "Time", "Description", "Vendor", "Amount");
     }
 
     private static void displayLedger() {
+        seperator();
         displayHeader();
         for (Transaction transaction : transactions) {
             System.out.println(transaction);
@@ -216,6 +224,7 @@ public class FinancialTracker {
     }
 
     private static void displayDeposits() {
+        seperator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if(transaction.getAmount() >= 0) {
@@ -225,6 +234,7 @@ public class FinancialTracker {
     }
 
     private static void displayPayments() {
+        seperator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if(transaction.getAmount() < 0) {
@@ -239,6 +249,7 @@ public class FinancialTracker {
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
+            seperator();
             System.out.println("Reports");
             System.out.println("Choose an option:");
             System.out.println("1) Month To Date");
@@ -306,6 +317,7 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
         // iterate transactions, print those within the range
+        seperator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
@@ -316,6 +328,7 @@ public class FinancialTracker {
 
     private static void filterTransactionsByVendor(String vendor) {
         // iterate transactions, print those with matching vendor
+        seperator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if (transaction.getVendor().equalsIgnoreCase(vendor)) {
@@ -328,17 +341,52 @@ public class FinancialTracker {
        Custom Search
        ------------------------------------------------------------------ */
     private static void customSearchMenu(Scanner scanner) {
+        String[] dateConfig = {"2012-10-02", "", "Inclusive"};
+        String[] timeConfig = {"", "13:23:32", "Inclusive"};
+        String[] descriptionConfig = {"", "Loose"};
+        String[] vendorConfig = {"", "Loose"};
+        String[] amountConfig = {"", "Greater Than"};
+
         boolean running = true;
 
         while (running) {
+            seperator();
             System.out.println("Custom Search");
             System.out.println("Customize your query:");
+
             System.out.println("1) Edit Start & End Date");
+            System.out.printf("   %-14s: %-11s%n" +
+                              "   %-14s: %-11s%n" +
+                              "   %-14s: %-11s%n",
+                    "> Start Date", dateConfig[0].equalsIgnoreCase("") ? "N/A" : dateConfig[0],
+                    "> End Date", dateConfig[1].equalsIgnoreCase("") ? "N/A" : dateConfig[1],
+                    "> Search Type", dateConfig[2]);
+
             System.out.println("2) Edit Start & End Time");
+            System.out.printf("   %-14s: %-9s%n" +
+                              "   %-14s: %-9s%n" +
+                              "   %-14s: %-9s%n",
+                    "> Start Time", timeConfig[0].equalsIgnoreCase("") ? "N/A" : timeConfig[0],
+                    "> End Time", timeConfig[1].equalsIgnoreCase("") ? "N/A" : timeConfig[1],
+                    "> Search Type", timeConfig[2]);
+
             System.out.println("3) Edit Description");
+            System.out.printf("   %-14s: %-9s%n" +
+                              "   %-14s: %-9s%n",
+                    "> Description", descriptionConfig[0].equalsIgnoreCase("") ? "N/A" : descriptionConfig[0],
+                    "> Search Type", descriptionConfig[1]);
+
             System.out.println("4) Edit Vendor");
+            System.out.printf("   %-14s: %-9s%n" +
+                              "   %-14s: %-9s%n",
+                    "> Vendor", vendorConfig[0].equalsIgnoreCase("") ? "N/A" : vendorConfig[0],
+                    "> Search Type", vendorConfig[1]);
+
             System.out.println("5) Edit Amount");
-            System.out.println("6) Edit Amount");
+            System.out.printf("   %-14s: %-9s%n" +
+                              "   %-14s: %-9s%n",
+                    "> Amount", amountConfig[0].equalsIgnoreCase("") ? "N/A" : amountConfig[0],
+                    "> Search Type", amountConfig[1]);
 
             String input = scanner.nextLine().trim();
 
