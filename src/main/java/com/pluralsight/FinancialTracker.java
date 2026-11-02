@@ -1,9 +1,7 @@
 package com.pluralsight;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -254,7 +252,14 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> {/* TODO – month-to-date report */ }
+                case "1" -> {/* TODO – month-to-date report */
+                    Month month = LocalDate.now().getMonth();
+                    Year year = Year.now();
+
+                    LocalDate startOfMonth = LocalDate.of(year.getValue(), month.getValue(), 1);
+                    LocalDate now = LocalDate.now();
+                    filterTransactionsByDate(startOfMonth, now);
+                }
                 case "2" -> {/* TODO – previous month report */ }
                 case "3" -> {/* TODO – year-to-date report   */ }
                 case "4" -> {/* TODO – previous year report  */ }
@@ -272,7 +277,7 @@ public class FinancialTracker {
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
         // TODO – iterate transactions, print those within the range
         for (Transaction transaction : transactions) {
-            if (transaction.getLocalDate().isAfter(start) && transaction.getLocalDate().isBefore(end)) {
+            if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
                 System.out.println(transaction);
             }
         }
