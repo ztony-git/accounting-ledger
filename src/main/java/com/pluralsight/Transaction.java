@@ -35,11 +35,11 @@ public class Transaction {
         this.time = time;
     }
 
-    public String getPaymentName() {
+    public String getDescription() {
         return description;
     }
 
-    public void setPaymentName(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -63,5 +63,13 @@ public class Transaction {
         return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "|"
                 + time.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "|"
                 + description + "|" + vendor + "|" + String.format("%.2f", amount) + "\n";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%-12s%-10s%-40s%-25s$%.2f",
+                getLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                getLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+                getDescription(), getVendor(), getAmount());
     }
 }

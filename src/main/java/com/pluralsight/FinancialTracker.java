@@ -206,11 +206,34 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-    private static void displayLedger() { /* TODO – print all transactions in column format, newest first */ }
+    private static void displayHeader() {
+        System.out.printf("%-12s%-10s%-40s%-25s%s%n", "Date", "Time", "Description", "Vendor", "Amount");
+    }
 
-    private static void displayDeposits() { /* TODO – only amount > 0               */ }
+    private static void displayLedger() {
+        displayHeader();
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
+        }
+    }
 
-    private static void displayPayments() { /* TODO – only amount < 0               */ }
+    private static void displayDeposits() {
+        displayHeader();
+        for (Transaction transaction : transactions) {
+            if(transaction.getAmount() >= 0) {
+                System.out.println(transaction);
+            }
+        }
+    }
+
+    private static void displayPayments() {
+        displayHeader();
+        for (Transaction transaction : transactions) {
+            if(transaction.getAmount() < 0) {
+                System.out.println(transaction);
+            }
+        }
+    }
 
     /* ------------------------------------------------------------------
        Reports menu
@@ -286,6 +309,7 @@ public class FinancialTracker {
     }
 
     private static void sortByDateTime(ArrayList<Transaction> transactions) {
-        transactions.sort(Comparator.comparing(Transaction::getLocalDate).thenComparing(Transaction::getLocalTime));
+        // sorts by newest first
+        transactions.sort(Comparator.comparing(Transaction::getLocalDate).thenComparing(Transaction::getLocalTime).reversed());
     }
 }
