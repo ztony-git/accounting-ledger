@@ -15,7 +15,7 @@ import java.util.Scanner;
  * A deposit has a positive amount; a payment is stored
  * as a negative amount.
  *
- * TODO: create the Transaction class in this package first.
+ *       create the Transaction class in this package first.
  *       One object = one line of the file. Decide its fields from
  *       the file format above, add a constructor and getters.
  *       This class does not compile until Transaction exists.
@@ -252,7 +252,7 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> {/* TODO – month-to-date report */
+                case "1" -> { // month-to-date report
                     int month = LocalDate.now().getMonthValue();
                     int year = LocalDate.now().getYear();
 
@@ -260,7 +260,7 @@ public class FinancialTracker {
                     LocalDate end = LocalDate.now(); // today
                     filterTransactionsByDate(start, end);
                 }
-                case "2" -> {/* TODO – previous month report */
+                case "2" -> { // previous month report
                     int currentMonth = LocalDate.now().getMonthValue();
                     int month = (currentMonth - 1) % 12;
                     int year;
@@ -274,27 +274,27 @@ public class FinancialTracker {
                     LocalDate end = LocalDate.of(year, month, start.lengthOfMonth()); // end of prev month
                     filterTransactionsByDate(start, end);
                 }
-                case "3" -> {/* TODO – year-to-date report   */
+                case "3" -> { // year-to-date report
                     int year = LocalDate.now().getYear();
 
                     LocalDate start = LocalDate.of(year, 1, 1); // start of year
                     LocalDate end = LocalDate.now(); // today
                     filterTransactionsByDate(start, end);
                 }
-                case "4" -> {/* TODO – previous year report  */
+                case "4" -> { // previous year report
                     int year =  LocalDate.now().getYear() - 1;
 
                     LocalDate start = LocalDate.of(year, 1, 1);
                     LocalDate end = LocalDate.of(year, 12, 31);
                     filterTransactionsByDate(start, end);
                 }
-                case "5" -> {/* TODO – prompt for vendor then report */
+                case "5" -> { // prompt for vendor then report
                     System.out.print("Enter Vendor: ");
                     String vendor = scanner.nextLine();
 
                     filterTransactionsByVendor(vendor);
                 }
-                case "6" -> customSearch(scanner);
+                case "6" -> customSearchMenu(scanner);
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
             }
@@ -305,7 +305,7 @@ public class FinancialTracker {
        Reporting helpers
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        // TODO – iterate transactions, print those within the range
+        // iterate transactions, print those within the range
         displayHeader();
         for (Transaction transaction : transactions) {
             if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
@@ -315,11 +315,46 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByVendor(String vendor) {
-        // TODO – iterate transactions, print those with matching vendor
+        // iterate transactions, print those with matching vendor
         displayHeader();
         for (Transaction transaction : transactions) {
             if (transaction.getVendor().equalsIgnoreCase(vendor)) {
                 System.out.println(transaction);
+            }
+        }
+    }
+
+    /* ------------------------------------------------------------------
+       Custom Search
+       ------------------------------------------------------------------ */
+    private static void customSearchMenu(Scanner scanner) {
+        boolean running = true;
+
+        while (running) {
+            System.out.println("Custom Search");
+            System.out.println("Customize your query:");
+            System.out.println("1) Edit Start & End Date");
+            System.out.println("2) Edit Start & End Time");
+            System.out.println("3) Edit Description");
+            System.out.println("4) Edit Vendor");
+            System.out.println("5) Edit Amount");
+            System.out.println("6) Edit Amount");
+
+            String input = scanner.nextLine().trim();
+
+            switch (input) {
+                case "1" -> {/* TODO – Start & End date, Inclusive v Exclusive */
+                }
+                case "2" -> {/* TODO – Start & End time, Inclusive v Exclusive */
+                }
+                case "3" -> {/* TODO – Description Strict vs Loose */
+                }
+                case "4" -> {/* TODO – Vendor Strict vs Loose  */
+                }
+                case "5" -> {/* TODO – Amount >, <, = within % range */
+                }
+                case "0" -> running = false;
+                default -> System.out.println("Invalid option");
             }
         }
     }
