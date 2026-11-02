@@ -50,7 +50,7 @@ public class FinancialTracker {
         // customSearchMenu(scanner);
 
         while (running) {
-            seperator();
+            separator();
             System.out.println("Welcome to TransactionApp");
             System.out.println("Choose an option:");
             System.out.println("D) Add Deposit");
@@ -189,7 +189,7 @@ public class FinancialTracker {
     private static void ledgerMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
-            seperator();
+            separator();
             System.out.println("Ledger");
             System.out.println("Choose an option:");
             System.out.println("A) All");
@@ -214,7 +214,7 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-    private static void seperator() {
+    private static void separator() {
         System.out.println("-----------------------------------------------------------------");
     }
 
@@ -223,7 +223,7 @@ public class FinancialTracker {
     }
 
     private static void displayLedger() {
-        seperator();
+        separator();
         displayHeader();
         for (Transaction transaction : transactions) {
             System.out.println(transaction);
@@ -231,7 +231,7 @@ public class FinancialTracker {
     }
 
     private static void displayDeposits() {
-        seperator();
+        separator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if(transaction.getAmount() >= 0) {
@@ -241,7 +241,7 @@ public class FinancialTracker {
     }
 
     private static void displayPayments() {
-        seperator();
+        separator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if(transaction.getAmount() < 0) {
@@ -256,7 +256,7 @@ public class FinancialTracker {
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
-            seperator();
+            separator();
             System.out.println("Reports");
             System.out.println("Choose an option:");
             System.out.println("1) Month To Date");
@@ -324,7 +324,7 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
         // iterate transactions, print those within the range
-        seperator();
+        separator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
@@ -335,7 +335,7 @@ public class FinancialTracker {
 
     private static void filterTransactionsByVendor(String vendor) {
         // iterate transactions, print those with matching vendor
-        seperator();
+        separator();
         displayHeader();
         for (Transaction transaction : transactions) {
             if (transaction.getVendor().equalsIgnoreCase(vendor)) {
@@ -357,7 +357,7 @@ public class FinancialTracker {
         boolean running = true;
 
         while (running) {
-            seperator();
+            separator();
             System.out.println("Custom Search");
             System.out.println("Customize your query:");
 
