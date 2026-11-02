@@ -288,7 +288,12 @@ public class FinancialTracker {
                     LocalDate end = LocalDate.of(year, 12, 31);
                     filterTransactionsByDate(start, end);
                 }
-                case "5" -> {/* TODO – prompt for vendor then report */ }
+                case "5" -> {/* TODO – prompt for vendor then report */
+                    System.out.print("Enter Vendor: ");
+                    String vendor = scanner.nextLine();
+
+                    filterTransactionsByVendor(vendor);
+                }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
@@ -301,6 +306,7 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
         // TODO – iterate transactions, print those within the range
+        displayHeader();
         for (Transaction transaction : transactions) {
             if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
                 System.out.println(transaction);
@@ -310,6 +316,12 @@ public class FinancialTracker {
 
     private static void filterTransactionsByVendor(String vendor) {
         // TODO – iterate transactions, print those with matching vendor
+        displayHeader();
+        for (Transaction transaction : transactions) {
+            if (transaction.getVendor().equalsIgnoreCase(vendor)) {
+                System.out.println(transaction);
+            }
+        }
     }
 
     private static void customSearch(Scanner scanner) {
