@@ -281,7 +281,13 @@ public class FinancialTracker {
                     LocalDate end = LocalDate.now(); // today
                     filterTransactionsByDate(start, end);
                 }
-                case "4" -> {/* TODO – previous year report  */ }
+                case "4" -> {/* TODO – previous year report  */
+                    int year =  LocalDate.now().getYear() - 1;
+
+                    LocalDate start = LocalDate.of(year, 1, 1);
+                    LocalDate end = LocalDate.of(year, 12, 31);
+                    filterTransactionsByDate(start, end);
+                }
                 case "5" -> {/* TODO – prompt for vendor then report */ }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
