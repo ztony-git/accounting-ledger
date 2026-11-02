@@ -118,8 +118,11 @@ public class FinancialTracker {
         LocalDateTime dateTime = null;
         while (dateTime == null) { // keep asking until correct format is followed
             try {
-                System.out.print("Enter the date and time (yyyy-MM-dd HH:mm:ss): ");
-                dateTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern(DATETIME_PATTERN));
+                System.out.print("Enter the date and time (yyyy-MM-dd HH:mm:ss). X to return home: ");
+                String in = scanner.nextLine();
+                if (in.equalsIgnoreCase("X")) return null;
+
+                dateTime = LocalDateTime.parse(in, DateTimeFormatter.ofPattern(DATETIME_PATTERN));
             }  catch (Exception e) {
                 System.out.println("Invalid date and time: " + e.getMessage());
             }
@@ -158,6 +161,8 @@ public class FinancialTracker {
      */
     private static void addDeposit(Scanner scanner) {
         Transaction transaction = addTransaction(scanner);
+        if (transaction == null) return;
+
         transactions.add(transaction);
         sortByDateTime(transactions);
         appendTransaction(transaction);
@@ -170,6 +175,8 @@ public class FinancialTracker {
      */
     private static void addPayment(Scanner scanner) {
         Transaction transaction = addTransaction(scanner);
+        if (transaction == null) return;
+
         transaction.setAmount(-transaction.getAmount());
         transactions.add(transaction);
         sortByDateTime(transactions);
