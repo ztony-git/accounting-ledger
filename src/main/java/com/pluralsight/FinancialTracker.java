@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 /*
@@ -42,6 +43,9 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     public static void main(String[] args) {
         loadTransactions(FILE_NAME);
+
+        // sort transactions by newest first
+        sortByDateTime(transactions);
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
@@ -155,6 +159,7 @@ public class FinancialTracker {
     private static void addDeposit(Scanner scanner) {
         Transaction transaction = addTransaction(scanner);
         transactions.add(transaction);
+        sortByDateTime(transactions);
         appendTransaction(transaction);
     }
 
@@ -167,6 +172,7 @@ public class FinancialTracker {
         Transaction transaction = addTransaction(scanner);
         transaction.setAmount(-transaction.getAmount());
         transactions.add(transaction);
+        sortByDateTime(transactions);
         appendTransaction(transaction);
     }
 
@@ -277,5 +283,9 @@ public class FinancialTracker {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private static void sortByDateTime(ArrayList<Transaction> transactions) {
+        transactions.sort(Comparator.comparing(Transaction::getLocalDate).thenComparing(Transaction::getLocalTime));
     }
 }
