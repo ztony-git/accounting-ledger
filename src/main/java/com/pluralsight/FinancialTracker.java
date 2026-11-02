@@ -253,14 +253,27 @@ public class FinancialTracker {
 
             switch (input) {
                 case "1" -> {/* TODO – month-to-date report */
-                    Month month = LocalDate.now().getMonth();
-                    Year year = Year.now();
+                    int month = LocalDate.now().getMonthValue();
+                    int year = LocalDate.now().getYear();
 
-                    LocalDate startOfMonth = LocalDate.of(year.getValue(), month.getValue(), 1);
+                    LocalDate startOfMonth = LocalDate.of(year, month, 1);
                     LocalDate now = LocalDate.now();
                     filterTransactionsByDate(startOfMonth, now);
                 }
-                case "2" -> {/* TODO – previous month report */ }
+                case "2" -> {/* TODO – previous month report */
+                    int currentMonth = LocalDate.now().getMonthValue();
+                    int month = (currentMonth - 1) % 12;
+                    int year;
+                    if (currentMonth - 1 > 0) { // check last month was this year
+                        year = LocalDate.now().getYear();
+                    } else {
+                        year = LocalDate.now().getYear() - 1;
+                    }
+
+                    LocalDate startOfMonth = LocalDate.of(year, month, 1);
+                    LocalDate endOfMonth = LocalDate.of(year, month, startOfMonth.lengthOfMonth());
+                    filterTransactionsByDate(startOfMonth, endOfMonth);
+                }
                 case "3" -> {/* TODO – year-to-date report   */ }
                 case "4" -> {/* TODO – previous year report  */ }
                 case "5" -> {/* TODO – prompt for vendor then report */ }
