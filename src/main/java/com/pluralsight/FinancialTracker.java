@@ -401,7 +401,7 @@ public class FinancialTracker {
             }
             case "inverse" -> {
                 for (Transaction transaction : transactions) {
-                    if (!transaction.getLocalDate().isAfter(start) && !transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
+                    if (transaction.getLocalDate().isAfter(end) || transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
                         filteredTransactions.add(transaction);
                     }
                 }
