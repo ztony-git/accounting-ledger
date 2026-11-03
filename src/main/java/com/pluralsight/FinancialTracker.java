@@ -496,7 +496,7 @@ public class FinancialTracker {
             return;
         }
 
-        System.out.println("Updating Time Query...");
+        System.out.println("Updating Description Query...");
         descConfig[0] = desc;
         descConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
