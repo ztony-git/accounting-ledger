@@ -406,10 +406,11 @@ public class FinancialTracker {
                 case "2" -> { // Start & End time, Inclusive v Exclusive
                     queryTime(scanner, timeConfig);
                 }
-                case "3" -> { /* Description Strict vs Loose */
+                case "3" -> { // Description Strict vs Loose
                     queryDesc(scanner, descConfig);
                 }
-                case "4" -> {/* TODO – Vendor Strict vs Loose  */
+                case "4" -> {// Vendor Strict vs Loose
+                    queryVendor(scanner, vendorConfig);
                 }
                 case "5" -> {/* TODO – Amount >, <, = within % range */
                 }
@@ -498,6 +499,25 @@ public class FinancialTracker {
         System.out.println("Updating Time Query...");
         descConfig[0] = desc;
         descConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+    }
+
+    private static void queryVendor(Scanner scanner, String[] vendorConfig) {
+        separator();
+        System.out.println("Editing vendor query:");
+
+        System.out.print("Vendor: ");
+        String vendor = scanner.nextLine();
+
+        System.out.print("Search Type (Loose/Strict): ");
+        String searchType = scanner.nextLine();
+        if (!searchType.equalsIgnoreCase("Loose") && !searchType.equalsIgnoreCase("Strict")) {
+            System.out.println("Invalid search type");
+            return;
+        }
+
+        System.out.println("Updating Vendor Query...");
+        vendorConfig[0] = vendor;
+        vendorConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void customSearch(Scanner scanner) {
