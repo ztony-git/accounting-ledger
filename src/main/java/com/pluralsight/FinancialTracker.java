@@ -412,7 +412,8 @@ public class FinancialTracker {
                 case "4" -> {// Vendor Strict vs Loose
                     queryVendor(scanner, vendorConfig);
                 }
-                case "5" -> {/* TODO – Amount >, <, = within % range */
+                case "5" -> {// Amount >, <, = within % range
+                    queryAmount(scanner, amountConfig);
                 }
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
