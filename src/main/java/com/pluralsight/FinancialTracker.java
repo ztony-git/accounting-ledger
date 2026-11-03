@@ -343,17 +343,6 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Reporting helpers
        ------------------------------------------------------------------ */
-    private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        // iterate transactions, print those within the range
-        separator();
-        displayHeader();
-        for (Transaction transaction : transactions) {
-            if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
-                System.out.println(transaction);
-            }
-        }
-    }
-
     private static void filterTransactionsByVendor(String vendor) {
         // iterate transactions, print those with matching vendor
         separator();
