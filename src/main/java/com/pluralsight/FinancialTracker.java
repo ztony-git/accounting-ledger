@@ -346,6 +346,60 @@ public class FinancialTracker {
         }
     }
 
+    private static ArrayList<Transaction> filterTransactionsByDate(String[] dateConfig, ArrayList<Transaction> transactions) {
+        // iterate transactions, print those within the range
+        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+        LocalDate start = null;
+        LocalDate end = null;
+
+        // if no set dates, don't filter
+        if (dateConfig[0].equalsIgnoreCase("") && dateConfig[1].equalsIgnoreCase(""))
+            return transactions;
+
+        // if both set dates, filter from set dates
+        if (!dateConfig[0].equalsIgnoreCase("") && !dateConfig[1].equalsIgnoreCase("")) {
+            start = LocalDate.parse(dateConfig[0]);
+            end = LocalDate.parse(dateConfig[1]);
+        }
+
+        // if only first set date, assume filter from first date until today
+        if (!dateConfig[0].equalsIgnoreCase("") && dateConfig[1].equalsIgnoreCase("")) {
+            start = LocalDate.parse(dateConfig[0]);
+            end = LocalDate.now();
+        }
+
+        // if only second set date, filter until second date
+        if (dateConfig[0].equalsIgnoreCase("") && !dateConfig[1].equalsIgnoreCase("")) {
+            start = LocalDate.of(0, 1,1);
+            end = LocalDate.parse(dateConfig[1]);
+        }
+
+
+        // search loop
+        if (dateConfig[2].equalsIgnoreCase("Inclusive")) {
+            for (Transaction transaction : transactions) {
+                if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
+                    filteredTransactions.add(transaction);
+                }
+            }
+        } else if (dateConfig[2].equalsIgnoreCase("Exclusive")) {
+            for (Transaction transaction : transactions) {
+                if (transaction.getLocalDate().isAfter(start) && transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
+                    filteredTransactions.add(transaction);
+                }
+            }
+        } else if (dateConfig[2].equalsIgnoreCase("Inverse")) {
+            for (Transaction transaction : transactions) {
+                if (!transaction.getLocalDate().isAfter(start) && !transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
+                    filteredTransactions.add(transaction);
+                }
+            }
+        }
+
+        return  filteredTransactions;
+    }
+
+
     /* ------------------------------------------------------------------
        Custom Search
        ------------------------------------------------------------------ */
@@ -397,10 +451,14 @@ public class FinancialTracker {
                     "> Amount", amountConfig[0].equalsIgnoreCase("") ? "N/A" : amountConfig[0],
                     "> Search Type", amountConfig[1]);
 
+            System.out.println("6) Search");
+
+            System.out.println("0) Return");
+
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> { // Start & End date, Inclusive v Exclusive
+                case "1" -> { // Start & End date, Inclusive v Exclusive v Inverse
                     queryDate(scanner, dateConfig);
                 }
                 case "2" -> { // Start & End time, Inclusive v Exclusive
@@ -415,6 +473,9 @@ public class FinancialTracker {
                 case "5" -> {// Amount >, <, = within % range
                     queryAmount(scanner, amountConfig);
                 }
+                case "6" -> {// Search
+                    customSearch(dateConfig, timeConfig, descConfig, vendorConfig, amountConfig);
+                }
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
             }
@@ -427,21 +488,24 @@ public class FinancialTracker {
 
         System.out.print("Start Date (yyyy-MM-dd): ");
         String startDate = scanner.nextLine();
-        if (parseDate(startDate) == null) {
+        if (parseDate(startDate) == null && !startDate.equalsIgnoreCase("")) {
             System.out.println("Invalid date");
             return;
         }
 
         System.out.print("End Date (yyyy-MM-dd): ");
         String endDate = scanner.nextLine();
-        if (parseDate(endDate) == null) {
+        if (parseDate(endDate) == null && !startDate.equalsIgnoreCase("")) {
             System.out.println("Invalid date");
             return;
         }
 
-        System.out.print("Search Type (Inclusive/Exclusive): ");
+        System.out.print("Search Type (Inclusive/Exclusive/Inverse): ");
         String searchType = scanner.nextLine();
-        if (!searchType.equalsIgnoreCase("Inclusive") && !searchType.equalsIgnoreCase("Exclusive")) {
+        if (!searchType.equalsIgnoreCase("Inclusive")
+                && !searchType.equalsIgnoreCase("Exclusive")
+                && !searchType.equalsIgnoreCase("Inverse")
+                && !searchType.equalsIgnoreCase("")) {
             System.out.println("Invalid search type");
             return;
         }
@@ -449,7 +513,9 @@ public class FinancialTracker {
         System.out.println("Updating Date Query...");
         dateConfig[0] = startDate;
         dateConfig[1] = endDate;
-        dateConfig[2] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+
+        // if no input use the same search type
+        dateConfig[2] = searchType.equalsIgnoreCase("") ? dateConfig[2] : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void queryTime(Scanner scanner, String[] timeConfig) {
@@ -549,9 +615,15 @@ public class FinancialTracker {
         amountConfig[1] = searchType;
     }
 
-    private static void customSearch(Scanner scanner) {
+    private static void customSearch(String[] dateConfig, String[] timeConfig, String[] descConfig, String[] vendorConfig, String[] amountConfig) {
         // TODO – prompt for any combination of date range, description,
         //        vendor, and exact amount, then display matches
+        ArrayList<Transaction> filteredTransactions =  new ArrayList<>();
+        filteredTransactions = filterTransactionsByDate(dateConfig, transactions);
+
+        for (Transaction transaction : filteredTransactions) {
+            System.out.println(transaction);
+        }
     }
 
     /* ------------------------------------------------------------------
