@@ -488,14 +488,14 @@ public class FinancialTracker {
 
         System.out.print("Start Date (yyyy-MM-dd): ");
         String startDate = scanner.nextLine();
-        if (parseDate(startDate) == null && !startDate.equalsIgnoreCase("")) {
+        if (parseDate(startDate) == null && !startDate.isEmpty()) {
             System.out.println("Invalid date");
             return;
         }
 
         System.out.print("End Date (yyyy-MM-dd): ");
         String endDate = scanner.nextLine();
-        if (parseDate(endDate) == null && !startDate.equalsIgnoreCase("")) {
+        if (parseDate(endDate) == null  && !startDate.isEmpty()) {
             System.out.println("Invalid date");
             return;
         }
@@ -505,7 +505,7 @@ public class FinancialTracker {
         if (!searchType.equalsIgnoreCase("Inclusive")
                 && !searchType.equalsIgnoreCase("Exclusive")
                 && !searchType.equalsIgnoreCase("Inverse")
-                && !searchType.equalsIgnoreCase("")) {
+                && !searchType.isEmpty()) {
             System.out.println("Invalid search type");
             return;
         }
@@ -515,7 +515,7 @@ public class FinancialTracker {
         dateConfig[1] = endDate;
 
         // if no input use the same search type
-        dateConfig[2] = searchType.equalsIgnoreCase("") ? dateConfig[2] : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+        dateConfig[2] = searchType.isEmpty() ? dateConfig[2] : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void queryTime(Scanner scanner, String[] timeConfig) {
@@ -633,7 +633,6 @@ public class FinancialTracker {
         try {
             return LocalDate.parse(s, DateTimeFormatter.ofPattern(DATE_PATTERN));
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid Date: " + e.getMessage());
             return null;
         }
     }
