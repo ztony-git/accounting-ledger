@@ -94,8 +94,8 @@ public class FinancialTracker {
             while((line = reader.readLine()) != null) { // create and fill transactions arraylist with loaded .csv
                 String[] data = line.split("\\|");
 
-                LocalDate date = LocalDate.parse(data[0], DateTimeFormatter.ofPattern(DATE_PATTERN));
-                LocalTime time = LocalTime.parse(data[1], DateTimeFormatter.ofPattern(TIME_PATTERN));
+                LocalDate date = LocalDate.parse(data[0], DATE_FMT);
+                LocalTime time = LocalTime.parse(data[1], TIME_FMT);
 
                 Transaction transaction = new Transaction(date, time, data[2], data[3], Double.parseDouble(data[4]));
                 transactions.add(transaction);
@@ -124,7 +124,7 @@ public class FinancialTracker {
                 String in = scanner.nextLine();
                 if (in.equalsIgnoreCase("X")) return null;
 
-                dateTime = LocalDateTime.parse(in, DateTimeFormatter.ofPattern(DATETIME_PATTERN));
+                dateTime = LocalDateTime.parse(in, DATETIME_FMT);
             }  catch (Exception e) {
                 System.out.println("Invalid date and time: " + e.getMessage());
             }
@@ -631,7 +631,7 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
         try {
-            return LocalDate.parse(s, DateTimeFormatter.ofPattern(DATE_PATTERN));
+            return LocalDate.parse(s, DATE_FMT);
         } catch (DateTimeParseException e) {
             return null;
         }
@@ -639,7 +639,7 @@ public class FinancialTracker {
 
     private static LocalTime parseTime(String s) {
         try {
-            return LocalTime.parse(s, DateTimeFormatter.ofPattern(TIME_PATTERN));
+            return LocalTime.parse(s, TIME_FMT);
         } catch (DateTimeParseException e) {
             System.out.println("Invalid Time: " + e.getMessage());
             return null;
