@@ -252,6 +252,11 @@ public class FinancialTracker {
         }
     }
 
+    private static void displayTransactions(ArrayList<Transaction> transactions) {
+        separator();
+        displayHeader();
+        transactions.forEach(System.out::println);
+    }
     /* ------------------------------------------------------------------
        Reports menu
        ------------------------------------------------------------------ */
@@ -277,8 +282,11 @@ public class FinancialTracker {
                     int year = LocalDate.now().getYear();
 
                     LocalDate start = LocalDate.of(year, month, 1); // start of this month
-                    LocalDate end = LocalDate.now(); // today
-                    filterTransactionsByDate(start, end);
+                    ArrayList<Transaction> filteredTransactions = filterTransactionsByDate(new String[]{
+                            start.toString(), "", "Inclusive"
+                    }, transactions);
+
+                    displayTransactions(filteredTransactions);
                 }
                 case "2" -> { // previous month report
                     int currentMonth = LocalDate.now().getMonthValue();
@@ -292,21 +300,32 @@ public class FinancialTracker {
 
                     LocalDate start = LocalDate.of(year, month, 1);  // start of prev month
                     LocalDate end = LocalDate.of(year, month, start.lengthOfMonth()); // end of prev month
-                    filterTransactionsByDate(start, end);
+                    ArrayList<Transaction> filteredTransactions = filterTransactionsByDate(new String[]{
+                            start.toString(), end.toString(), "Inclusive"
+                    }, transactions);
+
+                    displayTransactions(filteredTransactions);
                 }
                 case "3" -> { // year-to-date report
                     int year = LocalDate.now().getYear();
 
                     LocalDate start = LocalDate.of(year, 1, 1); // start of year
-                    LocalDate end = LocalDate.now(); // today
-                    filterTransactionsByDate(start, end);
+                    ArrayList<Transaction> filteredTransactions = filterTransactionsByDate(new String[]{
+                            start.toString(), "", "Inclusive"
+                    }, transactions);
+
+                    displayTransactions(filteredTransactions);
                 }
                 case "4" -> { // previous year report
                     int year =  LocalDate.now().getYear() - 1;
 
                     LocalDate start = LocalDate.of(year, 1, 1);
                     LocalDate end = LocalDate.of(year, 12, 31);
-                    filterTransactionsByDate(start, end);
+                    ArrayList<Transaction> filteredTransactions = filterTransactionsByDate(new String[]{
+                            start.toString(), end.toString(), "Inclusive"
+                    }, transactions);
+
+                    displayTransactions(filteredTransactions);
                 }
                 case "5" -> { // prompt for vendor then report
                     System.out.print("Enter Vendor: ");
