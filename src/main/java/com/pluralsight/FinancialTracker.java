@@ -352,7 +352,7 @@ public class FinancialTracker {
     private static void customSearchMenu(Scanner scanner) {
         String[] dateConfig = {"", "", "Inclusive"};
         String[] timeConfig = {"", "", "Inclusive"};
-        String[] descriptionConfig = {"", "Loose"};
+        String[] descConfig = {"", "Loose"};
         String[] vendorConfig = {"", "Loose"};
         String[] amountConfig = {"", "Greater Than"};
 
@@ -382,8 +382,8 @@ public class FinancialTracker {
             System.out.println("3) Edit Description");
             System.out.printf("   %-14s: %-9s%n" +
                               "   %-14s: %-9s%n",
-                    "> Description", descriptionConfig[0].equalsIgnoreCase("") ? "N/A" : descriptionConfig[0],
-                    "> Search Type", descriptionConfig[1]);
+                    "> Description", descConfig[0].equalsIgnoreCase("") ? "N/A" : descConfig[0],
+                    "> Search Type", descConfig[1]);
 
             System.out.println("4) Edit Vendor");
             System.out.printf("   %-14s: %-9s%n" +
@@ -406,7 +406,8 @@ public class FinancialTracker {
                 case "2" -> { // Start & End time, Inclusive v Exclusive
                     queryTime(scanner, timeConfig);
                 }
-                case "3" -> {/* TODO – Description Strict vs Loose */
+                case "3" -> { /* Description Strict vs Loose */
+                    queryDesc(scanner, descConfig);
                 }
                 case "4" -> {/* TODO – Vendor Strict vs Loose  */
                 }
@@ -478,6 +479,25 @@ public class FinancialTracker {
         timeConfig[0] = startTime;
         timeConfig[1] = endTime;
         timeConfig[2] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+    }
+
+    private static void queryDesc(Scanner scanner, String[] descConfig) {
+        separator();
+        System.out.println("Editing description query:");
+
+        System.out.print("Description: ");
+        String desc = scanner.nextLine();
+
+        System.out.print("Search Type (Loose/Strict): ");
+        String searchType = scanner.nextLine();
+        if (!searchType.equalsIgnoreCase("Loose") && !searchType.equalsIgnoreCase("Strict")) {
+            System.out.println("Invalid search type");
+            return;
+        }
+
+        System.out.println("Updating Time Query...");
+        descConfig[0] = desc;
+        descConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void customSearch(Scanner scanner) {
