@@ -384,22 +384,26 @@ public class FinancialTracker {
 
 
         // search loop
-        if (dateConfig[2].equalsIgnoreCase("Inclusive")) {
-            for (Transaction transaction : transactions) {
-                if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
-                    filteredTransactions.add(transaction);
+        switch (dateConfig[2].toLowerCase()) {
+            case "inclusive" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getLocalDate().isAfter(end) && !transaction.getLocalDate().isBefore(start)) { // uses not to make check inclusive
+                        filteredTransactions.add(transaction);
+                    }
                 }
             }
-        } else if (dateConfig[2].equalsIgnoreCase("Exclusive")) {
-            for (Transaction transaction : transactions) {
-                if (transaction.getLocalDate().isAfter(start) && transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
-                    filteredTransactions.add(transaction);
+            case "exclusive" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getLocalDate().isAfter(start) && transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
+                        filteredTransactions.add(transaction);
+                    }
                 }
             }
-        } else if (dateConfig[2].equalsIgnoreCase("Inverse")) {
-            for (Transaction transaction : transactions) {
-                if (!transaction.getLocalDate().isAfter(start) && !transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
-                    filteredTransactions.add(transaction);
+            case "inverse" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getLocalDate().isAfter(start) && !transaction.getLocalDate().isBefore(end)) { // uses not to make check inclusive
+                        filteredTransactions.add(transaction);
+                    }
                 }
             }
         }
