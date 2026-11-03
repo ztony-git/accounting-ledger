@@ -520,6 +520,34 @@ public class FinancialTracker {
         vendorConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
+    private static void queryAmount(Scanner scanner, String[] amountConfig) {
+        separator();
+        System.out.println("Editing amount query:");
+
+        System.out.print("Amount: ");
+        String amount = scanner.nextLine();
+
+        System.out.print("Search Type (</>/=%): ");
+        String searchType = scanner.nextLine();
+        if (!searchType.equalsIgnoreCase("<") && !searchType.equalsIgnoreCase(">") && !searchType.equalsIgnoreCase("=")) {
+            System.out.println("Invalid search type");
+            return;
+        } else if (searchType.equalsIgnoreCase("=")) {
+            System.out.print("Range % (number only): ");
+            amount = scanner.nextLine();
+            amount = amount.replace("%", "");
+            amount = amount.replace(" ", "");
+            if(parseDouble(amount) == null) {
+                System.out.println("Invalid range");
+                return;
+            }
+        }
+
+        System.out.println("Updating Amount Query...");
+        amountConfig[0] = amount;
+        amountConfig[1] = searchType;
+    }
+
     private static void customSearch(Scanner scanner) {
         // TODO – prompt for any combination of date range, description,
         //        vendor, and exact amount, then display matches
@@ -547,8 +575,12 @@ public class FinancialTracker {
     }
 
     private static Double parseDouble(String s) {
-        /* TODO – return Double   or null */
-        return null;
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Number: " + e.getMessage());
+            return null;
+        }
     }
 
     /* ------------------------------------------------------------------
