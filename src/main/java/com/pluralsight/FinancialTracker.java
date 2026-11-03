@@ -507,7 +507,7 @@ public class FinancialTracker {
 
         System.out.print("End Date (yyyy-MM-dd): ");
         String endDate = scanner.nextLine();
-        if (parseDate(endDate) == null  && !startDate.isEmpty()) {
+        if (parseDate(endDate) == null  && !endDate.isEmpty()) {
             System.out.println("Invalid date");
             return;
         }
