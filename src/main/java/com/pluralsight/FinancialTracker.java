@@ -49,7 +49,7 @@ public class FinancialTracker {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-         customSearchMenu(scanner);
+//         customSearchMenu(scanner);
 
         while (running) {
             separator();
@@ -331,7 +331,9 @@ public class FinancialTracker {
                     System.out.print("Enter Vendor: ");
                     String vendor = scanner.nextLine();
 
-                    filterTransactionsByVendor(vendor);
+                    ArrayList<Transaction> filteredTransactions = filterTransactionsByVendor(new String[]{
+                            vendor, "Loose"}, transactions);
+                    displayTransactions(filteredTransactions);
                 }
                 case "6" -> customSearchMenu(scanner);
                 case "0" -> running = false;
@@ -343,17 +345,6 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Reporting helpers
        ------------------------------------------------------------------ */
-    private static void filterTransactionsByVendor(String vendor) {
-        // iterate transactions, print those with matching vendor
-        separator();
-        displayHeader();
-        for (Transaction transaction : transactions) {
-            if (transaction.getVendor().equalsIgnoreCase(vendor)) {
-                System.out.println(transaction);
-            }
-        }
-    }
-
     private static ArrayList<Transaction> filterTransactionsByDate(String[] dateConfig, ArrayList<Transaction> transactions) {
         // iterate transactions, print those within the range
         ArrayList<Transaction> filteredTransactions = new ArrayList<>();
@@ -506,6 +497,50 @@ public class FinancialTracker {
 
         return  filteredTransactions;
     }
+
+    private static ArrayList<Transaction> filterTransactionsByVendor(String[] vendorConfig, ArrayList<Transaction> transactions) {
+        // iterate transactions, print those within the range
+        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+
+        // if no set vendor, don't filter
+        if (vendorConfig[0].equalsIgnoreCase(""))
+            return transactions;
+
+        // search loop
+        switch (vendorConfig[1].toLowerCase()) {
+            case "loose" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getVendor().toLowerCase().contains(vendorConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "strict" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getVendor().equalsIgnoreCase(vendorConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "inverse loose" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getVendor().toLowerCase().contains(vendorConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "inverse strict" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getVendor().equalsIgnoreCase(vendorConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+        }
+
+        return  filteredTransactions;
+    }
+
     /* ------------------------------------------------------------------
        Custom Search
        ------------------------------------------------------------------ */
@@ -713,16 +748,28 @@ public class FinancialTracker {
         System.out.print("Vendor: ");
         String vendor = scanner.nextLine();
 
-        System.out.print("Search Type (Loose/Strict): ");
+        if (vendor.isEmpty()) {
+            System.out.println("Removing Vendor Query...");
+            vendorConfig[0] = vendor;
+            return;
+        }
+
+        System.out.print("Search Type (Loose/Strict/Inverse loose/Inverse strict): ");
         String searchType = scanner.nextLine();
-        if (!searchType.equalsIgnoreCase("Loose") && !searchType.equalsIgnoreCase("Strict")) {
+        if (!searchType.equalsIgnoreCase("Loose")
+                && !searchType.equalsIgnoreCase("Strict")
+                && !searchType.equalsIgnoreCase("Inverse Loose")
+                && !searchType.equalsIgnoreCase("Inverse Strict")
+                && !searchType.isEmpty()) {
             System.out.println("Invalid search type");
             return;
         }
 
         System.out.println("Updating Vendor Query...");
         vendorConfig[0] = vendor;
-        vendorConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+        // if no input use the same search type
+        vendorConfig[1] = searchType.isEmpty() ? vendorConfig[1]
+                : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void queryAmount(Scanner scanner, String[] amountConfig) {
@@ -760,6 +807,7 @@ public class FinancialTracker {
         filteredTransactions = filterTransactionsByDate(dateConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByTime(timeConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByDesc(descConfig, filteredTransactions);
+        filteredTransactions = filterTransactionsByVendor(vendorConfig, filteredTransactions);
 
         displayTransactions(filteredTransactions);
     }
