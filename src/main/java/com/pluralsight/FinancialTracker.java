@@ -49,7 +49,7 @@ public class FinancialTracker {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        // customSearchMenu(scanner);
+         customSearchMenu(scanner);
 
         while (running) {
             separator();
@@ -464,6 +464,34 @@ public class FinancialTracker {
         return  filteredTransactions;
     }
 
+    private static ArrayList<Transaction> filterTransactionsByDesc(String[] descConfig, ArrayList<Transaction> transactions) {
+        // iterate transactions, print those within the range
+        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+
+        // if no set desc, don't filter
+        if (descConfig[0].equalsIgnoreCase(""))
+            return transactions;
+
+        // search loop
+        switch (descConfig[1].toLowerCase()) {
+            case "loose" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getDescription().toLowerCase().contains(descConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "strict" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getDescription().equalsIgnoreCase(descConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+        }
+
+        return  filteredTransactions;
+    }
     /* ------------------------------------------------------------------
        Custom Search
        ------------------------------------------------------------------ */
@@ -628,14 +656,18 @@ public class FinancialTracker {
 
         System.out.print("Search Type (Loose/Strict): ");
         String searchType = scanner.nextLine();
-        if (!searchType.equalsIgnoreCase("Loose") && !searchType.equalsIgnoreCase("Strict")) {
+        if (!searchType.equalsIgnoreCase("Loose")
+                && !searchType.equalsIgnoreCase("Strict")
+                && !searchType.isEmpty()) {
             System.out.println("Invalid search type");
             return;
         }
 
         System.out.println("Updating Description Query...");
         descConfig[0] = desc;
-        descConfig[1] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+        // if no input use the same search type
+        descConfig[1] = searchType.isEmpty() ? descConfig[1]
+                : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void queryVendor(Scanner scanner, String[] vendorConfig) {
@@ -691,10 +723,9 @@ public class FinancialTracker {
         ArrayList<Transaction> filteredTransactions = new ArrayList<>(transactions);
         filteredTransactions = filterTransactionsByDate(dateConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByTime(timeConfig, filteredTransactions);
+        filteredTransactions = filterTransactionsByDesc(descConfig, filteredTransactions);
 
-        for (Transaction transaction : filteredTransactions) {
-            System.out.println(transaction);
-        }
+        displayTransactions(filteredTransactions);
     }
 
     /* ------------------------------------------------------------------
