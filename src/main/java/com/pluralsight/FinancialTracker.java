@@ -541,6 +541,54 @@ public class FinancialTracker {
         return  filteredTransactions;
     }
 
+    private static ArrayList<Transaction> filterTransactionsByAmount(String[] amountConfig, ArrayList<Transaction> transactions) {
+        // iterate transactions, print those within the range
+        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+
+        // if no set vendor, don't filter
+        if (amountConfig[0].equalsIgnoreCase(""))
+            return transactions;
+
+        double amount = parseDouble(amountConfig[0]);
+
+        // search loop
+        if (parseDouble(amountConfig[1]) != null) {
+            double min = amount * (1 - (parseDouble(amountConfig[1]) * .01));
+            double max = amount * (1 + (parseDouble(amountConfig[1]) * .01));
+
+            for (Transaction transaction : transactions) {
+                double fixedAmount = amountConfig[2].equals("true") ? Math.abs(transaction.getAmount()) : transaction.getAmount();
+
+                if (fixedAmount >= min && fixedAmount <= max) {
+                    filteredTransactions.add(transaction);
+                }
+            }
+        } else {
+            switch (amountConfig[1].toLowerCase()) {
+                case ">" -> {
+                    for (Transaction transaction : transactions) {
+                        double fixedAmount = amountConfig[2].equals("true") ? Math.abs(transaction.getAmount()) : transaction.getAmount();
+
+                        if (fixedAmount > amount) {
+                            filteredTransactions.add(transaction);
+                        }
+                    }
+                }
+                case "<" -> {
+                    for (Transaction transaction : transactions) {
+                        double fixedAmount = amountConfig[2].equals("true") ? Math.abs(transaction.getAmount()) : transaction.getAmount();
+
+                        if (fixedAmount < amount) {
+                            filteredTransactions.add(transaction);
+                        }
+                    }
+                }
+            }
+        }
+
+        return  filteredTransactions;
+    }
+
     /* ------------------------------------------------------------------
        Custom Search
        ------------------------------------------------------------------ */
@@ -549,7 +597,7 @@ public class FinancialTracker {
         String[] timeConfig = {"", "", "Inclusive"};
         String[] descConfig = {"", "Loose"};
         String[] vendorConfig = {"", "Loose"};
-        String[] amountConfig = {"", "Greater Than"};
+        String[] amountConfig = {"", "0", "false"};
 
         boolean running = true;
 
@@ -588,9 +636,11 @@ public class FinancialTracker {
 
             System.out.println("5) Edit Amount");
             System.out.printf("   %-14s: %-9s%n" +
+                              "   %-14s: %-9s%n" +
                               "   %-14s: %-9s%n",
                     "> Amount", amountConfig[0].equalsIgnoreCase("") ? "N/A" : amountConfig[0],
-                    "> Search Type", amountConfig[1]);
+                    "> Search Type", parseDouble(amountConfig[1]) == null ? amountConfig[1] : amountConfig[1] + "%",
+                    "> Absolute", amountConfig[2]);
 
             System.out.println("6) Search");
 
@@ -779,25 +829,41 @@ public class FinancialTracker {
         System.out.print("Amount: ");
         String amount = scanner.nextLine();
 
+        if (amount.isEmpty()) {
+            System.out.println("Removing Amount Query...");
+            amountConfig[0] = amount;
+            return;
+        }
+
         System.out.print("Search Type (</>/=%): ");
         String searchType = scanner.nextLine();
-        if (!searchType.equalsIgnoreCase("<") && !searchType.equalsIgnoreCase(">") && !searchType.equalsIgnoreCase("=")) {
+        if (!searchType.equalsIgnoreCase("<") && !searchType.equalsIgnoreCase(">")
+                && !searchType.equalsIgnoreCase("=") && !searchType.isEmpty()) {
             System.out.println("Invalid search type");
             return;
         } else if (searchType.equalsIgnoreCase("=")) {
             System.out.print("Range % (number only): ");
-            amount = scanner.nextLine();
-            amount = amount.replace("%", "");
-            amount = amount.replace(" ", "");
-            if(parseDouble(amount) == null) {
+            searchType = scanner.nextLine();
+            searchType = searchType.replace("%", "");
+            searchType = searchType.replace(" ", "");
+            if(parseDouble(searchType) == null) {
                 System.out.println("Invalid range");
                 return;
             }
         }
 
+        System.out.print("Absolute Value (true/false): ");
+        String abs = scanner.nextLine();
+        if (!abs.isEmpty() && !abs.equalsIgnoreCase("true") && !abs.equalsIgnoreCase("false")) {
+            System.out.println("Invalid absolute value type");
+            return;
+        }
+
         System.out.println("Updating Amount Query...");
         amountConfig[0] = amount;
-        amountConfig[1] = searchType;
+        amountConfig[1] = searchType.isEmpty() ? amountConfig[1]
+                : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+        amountConfig[2] = abs.isEmpty() ? amountConfig[2] : abs.toLowerCase();
     }
 
     private static void customSearch(String[] dateConfig, String[] timeConfig, String[] descConfig, String[] vendorConfig, String[] amountConfig) {
@@ -808,6 +874,7 @@ public class FinancialTracker {
         filteredTransactions = filterTransactionsByTime(timeConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByDesc(descConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByVendor(vendorConfig, filteredTransactions);
+        filteredTransactions = filterTransactionsByAmount(amountConfig, filteredTransactions);
 
         displayTransactions(filteredTransactions);
     }
@@ -835,7 +902,6 @@ public class FinancialTracker {
         try {
             return Double.parseDouble(s);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid Number: " + e.getMessage());
             return null;
         }
     }
