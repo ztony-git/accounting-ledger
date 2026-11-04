@@ -411,6 +411,58 @@ public class FinancialTracker {
         return  filteredTransactions;
     }
 
+    private static ArrayList<Transaction> filterTransactionsByTime(String[] timeConfig, ArrayList<Transaction> transactions) {
+        // iterate transactions, print those within the range
+        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+        LocalTime start = null;
+        LocalTime end = null;
+
+        // if no set times, don't filter
+        if (timeConfig[0].equalsIgnoreCase("") && timeConfig[1].equalsIgnoreCase(""))
+            return transactions;
+        // if both set times, filter from set times
+        if (!timeConfig[0].equalsIgnoreCase("") && !timeConfig[1].equalsIgnoreCase("")) {
+            start = LocalTime.parse(timeConfig[0], TIME_FMT);
+            end = LocalTime.parse(timeConfig[1], TIME_FMT);
+        }
+        // if only first set time, assume filter from first time until current time
+        if (!timeConfig[0].equalsIgnoreCase("") && timeConfig[1].equalsIgnoreCase("")) {
+            start = LocalTime.parse(timeConfig[0], TIME_FMT);
+            end = LocalTime.now();
+        }
+        // if only second set time, filter until second time
+        if (timeConfig[0].equalsIgnoreCase("") && !timeConfig[1].equalsIgnoreCase("")) {
+            start = LocalTime.of(0, 0,0);
+            end = LocalTime.parse(timeConfig[1], TIME_FMT);
+        }
+
+        // search loop
+        switch (timeConfig[2].toLowerCase()) {
+            case "inclusive" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getLocalTime().isAfter(end) && !transaction.getLocalTime().isBefore(start)) { // uses not to make check inclusive
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "exclusive" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getLocalTime().isAfter(start) && transaction.getLocalTime().isBefore(end)) { // uses not to make check inclusive
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "inverse" -> {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getLocalTime().isAfter(end) || transaction.getLocalTime().isBefore(start)) { // uses not to make check inclusive
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+        }
+
+        return  filteredTransactions;
+    }
 
     /* ------------------------------------------------------------------
        Custom Search
@@ -527,7 +579,8 @@ public class FinancialTracker {
         dateConfig[1] = endDate;
 
         // if no input use the same search type
-        dateConfig[2] = searchType.isEmpty() ? dateConfig[2] : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+        dateConfig[2] = searchType.isEmpty() ? dateConfig[2]
+                        : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void queryTime(Scanner scanner, String[] timeConfig) {
@@ -536,21 +589,24 @@ public class FinancialTracker {
 
         System.out.print("Start Time (hh:mm:ss): ");
         String startTime = scanner.nextLine();
-        if (parseTime(startTime) == null) {
+        if (parseTime(startTime) == null && !startTime.isEmpty()) {
             System.out.println("Invalid time");
             return;
         }
 
         System.out.print("End Time (hh:mm:ss): ");
         String endTime = scanner.nextLine();
-        if (parseTime(endTime) == null) {
+        if (parseTime(endTime) == null && !endTime.isEmpty()) {
             System.out.println("Invalid time");
             return;
         }
 
-        System.out.print("Search Type (Inclusive/Exclusive): ");
+        System.out.print("Search Type (Inclusive/Exclusive/Inverse): ");
         String searchType = scanner.nextLine();
-        if (!searchType.equalsIgnoreCase("Inclusive") && !searchType.equalsIgnoreCase("Exclusive")) {
+        if (!searchType.equalsIgnoreCase("Inclusive")
+                && !searchType.equalsIgnoreCase("Exclusive")
+                && !searchType.equalsIgnoreCase("Inverse")
+                && !searchType.isEmpty()) {
             System.out.println("Invalid search type");
             return;
         }
@@ -558,7 +614,9 @@ public class FinancialTracker {
         System.out.println("Updating Time Query...");
         timeConfig[0] = startTime;
         timeConfig[1] = endTime;
-        timeConfig[2] = searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
+        // if no input use the same search type
+        timeConfig[2] = searchType.isEmpty() ? timeConfig[2]
+                : searchType.substring(0, 1).toUpperCase() + searchType.substring(1).toLowerCase();
     }
 
     private static void queryDesc(Scanner scanner, String[] descConfig) {
@@ -632,6 +690,7 @@ public class FinancialTracker {
         //        vendor, and exact amount, then display matches
         ArrayList<Transaction> filteredTransactions = new ArrayList<>(transactions);
         filteredTransactions = filterTransactionsByDate(dateConfig, filteredTransactions);
+        filteredTransactions = filterTransactionsByTime(timeConfig, filteredTransactions);
 
         for (Transaction transaction : filteredTransactions) {
             System.out.println(transaction);
@@ -653,7 +712,6 @@ public class FinancialTracker {
         try {
             return LocalTime.parse(s, TIME_FMT);
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid Time: " + e.getMessage());
             return null;
         }
     }
