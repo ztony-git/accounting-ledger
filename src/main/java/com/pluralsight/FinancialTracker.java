@@ -488,6 +488,20 @@ public class FinancialTracker {
                     }
                 }
             }
+            case "inverse loose" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getDescription().toLowerCase().contains(descConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
+            case "inverse strict" -> {
+                for (Transaction transaction : transactions) {
+                    if (!transaction.getDescription().equalsIgnoreCase(descConfig[0])) {
+                        filteredTransactions.add(transaction);
+                    }
+                }
+            }
         }
 
         return  filteredTransactions;
@@ -654,10 +668,18 @@ public class FinancialTracker {
         System.out.print("Description: ");
         String desc = scanner.nextLine();
 
-        System.out.print("Search Type (Loose/Strict): ");
+        if (desc.isEmpty()) {
+            System.out.println("Removing Description Query...");
+            descConfig[0] = desc;
+            return;
+        }
+
+        System.out.print("Search Type (Loose/Strict/Inverse loose/Inverse strict): ");
         String searchType = scanner.nextLine();
         if (!searchType.equalsIgnoreCase("Loose")
                 && !searchType.equalsIgnoreCase("Strict")
+                && !searchType.equalsIgnoreCase("Inverse Loose")
+                && !searchType.equalsIgnoreCase("Inverse Strict")
                 && !searchType.isEmpty()) {
             System.out.println("Invalid search type");
             return;
