@@ -188,7 +188,6 @@ public class FinancialTracker {
 
         transaction.setAmount(-transaction.getAmount());
 
-
         System.out.println("Payment on " + transaction.getLocalDate().format(DATE_FMT)
                 + " " +  transaction.getLocalTime().format(TIME_FMT)
                 + " of $" + transaction.getAmount()
