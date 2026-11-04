@@ -165,6 +165,13 @@ public class FinancialTracker {
         Transaction transaction = addTransaction(scanner);
         if (transaction == null) return;
 
+        System.out.println("Deposit on " + transaction.getLocalDate().format(DATE_FMT)
+                + " " +  transaction.getLocalTime().format(TIME_FMT)
+                + " of $" + transaction.getAmount()
+                + " for " + transaction.getDescription()
+                + " by " + transaction.getVendor()
+                + " logged.");
+
         transactions.add(transaction);
         sortByDateTime(transactions);
         appendTransaction(transaction);
@@ -180,6 +187,14 @@ public class FinancialTracker {
         if (transaction == null) return;
 
         transaction.setAmount(-transaction.getAmount());
+
+
+        System.out.println("Payment on " + transaction.getLocalDate().format(DATE_FMT)
+                + " " +  transaction.getLocalTime().format(TIME_FMT)
+                + " of $" + transaction.getAmount()
+                + " for " + transaction.getDescription()
+                + " by " + transaction.getVendor()
+                + " logged.");
         transactions.add(transaction);
         sortByDateTime(transactions);
         appendTransaction(transaction);
