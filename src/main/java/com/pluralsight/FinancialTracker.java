@@ -606,6 +606,13 @@ public class FinancialTracker {
             return;
         }
 
+        if (startDate.isEmpty() && endDate.isEmpty()) {
+            System.out.println("Removing Date Query...");
+            dateConfig[0] = startDate;
+            dateConfig[1] = endDate;
+            return;
+        }
+
         System.out.print("Search Type (Inclusive/Exclusive/Inverse): ");
         String searchType = scanner.nextLine();
         if (!searchType.equalsIgnoreCase("Inclusive")
@@ -640,6 +647,13 @@ public class FinancialTracker {
         String endTime = scanner.nextLine();
         if (parseTime(endTime) == null && !endTime.isEmpty()) {
             System.out.println("Invalid time");
+            return;
+        }
+
+        if (startTime.isEmpty() && endTime.isEmpty()) {
+            System.out.println("Removing Time Query...");
+            timeConfig[0] = startTime;
+            timeConfig[1] = endTime;
             return;
         }
 
