@@ -67,9 +67,16 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return String.format("%-12s%-10s%-40s%-25s$%.2f",
+        int[] rgbPos = {0, 255, 0};
+        int[] rgbNeg = {255, 0, 0};
+
+        return String.format("%-12s%-10s%-40s%-25s%s$%.2f\033[0m",
                 getLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 getLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
-                getDescription(), getVendor(), getAmount());
+                getDescription(), getVendor(),
+                getAmount() > 0 ? "\033[38;2;" + rgbPos[0] + ";" + rgbPos[1] + ";" + rgbPos[2] + "m" :
+                    (getAmount() < 0 ? "\033[38;2;" + rgbNeg[0] + ";" + rgbNeg[1] + ";" + rgbNeg[2] + "m" :
+                    ""),
+                getAmount());
     }
 }
