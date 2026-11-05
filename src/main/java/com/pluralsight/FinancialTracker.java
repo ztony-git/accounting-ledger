@@ -8,21 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
 
-/*
- * Capstone skeleton – personal finance tracker.
- * ------------------------------------------------
- * File format  (pipe-delimited)
- *     yyyy-MM-dd|HH:mm:ss|description|vendor|amount
- * A deposit has a positive amount; a payment is stored
- * as a negative amount.
- *
- *       create the Transaction class in this package first.
- *       One object = one line of the file. Decide its fields from
- *       the file format above, add a constructor and getters.
- *       This class does not compile until Transaction exists.
- */
 public class FinancialTracker {
-
     /* ------------------------------------------------------------------
        Shared data and formatters
        ------------------------------------------------------------------ */
@@ -38,6 +24,7 @@ public class FinancialTracker {
     private static final DateTimeFormatter DATETIME_FMT = DateTimeFormatter.ofPattern(DATETIME_PATTERN);
 
     private static final String RESET = "\033[0m";
+
     /* ------------------------------------------------------------------
        Main menu
        ------------------------------------------------------------------ */
@@ -49,7 +36,7 @@ public class FinancialTracker {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-//         customSearchMenu(scanner);
+//        customSearchMenu(scanner);
         while (running) {
             separator();
             // Logo assisted with https://textartify.com/
@@ -92,16 +79,7 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        File I/O
        ------------------------------------------------------------------ */
-
-    /**
-     * Load transactions from FILE_NAME.
-     * • If the file doesn’t exist, create an empty one so that future writes succeed.
-     * • Each line looks like: date|time|description|vendor|amount
-     */
     public static void loadTransactions(String fileName) {
-        //       create file if it does not exist, then read each line,
-        //       parse the five fields, build a Transaction object,
-        //       and add it to the transactions list.
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
@@ -130,7 +108,6 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Add new transactions
        ------------------------------------------------------------------ */
-
     private static Transaction addTransaction(Scanner scanner) {
         // datetime
         LocalDateTime dateTime = null;
@@ -171,12 +148,6 @@ public class FinancialTracker {
         return new Transaction(date, time, description, vendor, amount);
     }
 
-    /**
-     * Prompt for ONE date+time string in the format
-     * "yyyy-MM-dd HH:mm:ss", plus description, vendor, amount.
-     * Validate that the amount entered is positive.
-     * Store the amount as-is (positive) and append to the file.
-     */
     private static void addDeposit(Scanner scanner) {
         Transaction transaction = addTransaction(scanner);
         if (transaction == null) return;
@@ -193,11 +164,6 @@ public class FinancialTracker {
         appendTransaction(transaction);
     }
 
-    /**
-     * Same prompts as addDeposit.
-     * Amount must be entered as a positive number,
-     * then converted to a negative amount before storing.
-     */
     private static void addPayment(Scanner scanner) {
         Transaction transaction = addTransaction(scanner);
         if (transaction == null) return;
@@ -403,7 +369,6 @@ public class FinancialTracker {
             start = LocalDate.of(0, 1,1);
             end = LocalDate.parse(dateConfig[1]);
         }
-
 
         // search loop
         switch (dateConfig[2].toLowerCase()) {
