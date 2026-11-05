@@ -66,7 +66,7 @@ public class FinancialTracker {
             };
 
             for (String s : art) {
-                System.out.println(gradientPrint(s, new int[] {208, 120, 255}, new int[] {114, 0, 176}));
+                System.out.println(gradientString(s, new int[] {208, 120, 255}, new int[] {114, 0, 176}));
             }
             separator();
 
@@ -956,7 +956,7 @@ public class FinancialTracker {
     }
 
     // Terminal Color code assisted with AI. Modified by Tony Zhang.
-    private static String coloredPrint(String string, int r, int g, int b) {
+    private static String coloredString(String string, int r, int g, int b) {
         StringBuilder sb = new StringBuilder();
 
         for (int c = 0; c < string.length(); c++) {
@@ -973,7 +973,7 @@ public class FinancialTracker {
         return sb.toString();
     }
 
-    private static String gradientPrint(String string, int[] startColors, int[] endColors) {
+    private static String gradientString(String string, int[] startColors, int[] endColors) {
         StringBuilder sb = new StringBuilder();
 
         int length = string.length();
