@@ -252,6 +252,7 @@ public class FinancialTracker {
 
     private static void displayHeader() {
         System.out.printf("%-12s%-10s%-40s%-25s%s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("=================================================================================================");
     }
 
     private static void displayLedger() {
