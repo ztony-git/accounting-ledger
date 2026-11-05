@@ -541,7 +541,7 @@ public class FinancialTracker {
         switch (vendorConfig[1].toLowerCase()) {
             case "loose" -> {
                 for (Transaction transaction : transactions) {
-                    if (transaction.getVendor().toLowerCase().contains(vendorConfig[0])) {
+                    if (transaction.getVendor().toLowerCase().contains(vendorConfig[0].toLowerCase())) {
                         filteredTransactions.add(transaction);
                     }
                 }
@@ -555,7 +555,7 @@ public class FinancialTracker {
             }
             case "inverse loose" -> {
                 for (Transaction transaction : transactions) {
-                    if (!transaction.getVendor().toLowerCase().contains(vendorConfig[0])) {
+                    if (!transaction.getVendor().toLowerCase().contains(vendorConfig[0].toLowerCase())) {
                         filteredTransactions.add(transaction);
                     }
                 }
