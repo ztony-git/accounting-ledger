@@ -129,6 +129,7 @@ This code queries users for information on their search filter. It asks for basi
 
 - Helper Classes. Methods that could be used across multiple classes such as ColoredString and GradientString could have been put here.
 - Condense more code. Both query and filter codes are nearly identical for each type of value they ask for. 
+- Create subissues in GitHub rather than adding items
 
 ## Resources
 
