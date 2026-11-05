@@ -617,7 +617,7 @@ public class FinancialTracker {
             }
         }
 
-        return  filteredTransactions;
+        return filteredTransactions;
     }
 
     /* ------------------------------------------------------------------
