@@ -679,24 +679,18 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> { // Start & End date, Inclusive v Exclusive v Inverse
-                    queryDate(scanner, dateConfig);
-                }
-                case "2" -> { // Start & End time, Inclusive v Exclusive
-                    queryTime(scanner, timeConfig);
-                }
-                case "3" -> { // Description Strict vs Loose
-                    queryDesc(scanner, descConfig);
-                }
-                case "4" -> {// Vendor Strict vs Loose
-                    queryVendor(scanner, vendorConfig);
-                }
-                case "5" -> {// Amount >, <, = within % range
-                    queryAmount(scanner, amountConfig);
-                }
-                case "6" -> {// Search
-                    customSearch(dateConfig, timeConfig, descConfig, vendorConfig, amountConfig);
-                }
+                // Start & End date, Inclusive v Exclusive v Inverse
+                case "1" -> queryDate(scanner, dateConfig);
+                // Start & End time, Inclusive v Exclusive
+                case "2" -> queryTime(scanner, timeConfig);
+                // Description Strict vs Loose
+                case "3" -> queryDesc(scanner, descConfig);
+                // Vendor Strict vs Loose
+                case "4" -> queryVendor(scanner, vendorConfig);
+                // Amount >, <, = within % range
+                case "5" -> queryAmount(scanner, amountConfig);
+                // Search
+                case "6" -> customSearch(dateConfig, timeConfig, descConfig, vendorConfig, amountConfig);
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
             }
