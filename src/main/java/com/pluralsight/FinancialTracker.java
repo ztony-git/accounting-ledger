@@ -891,8 +891,6 @@ public class FinancialTracker {
     }
 
     private static void customSearch(String[] dateConfig, String[] timeConfig, String[] descConfig, String[] vendorConfig, String[] amountConfig) {
-        // TODO – prompt for any combination of date range, description,
-        //        vendor, and exact amount, then display matches
         ArrayList<Transaction> filteredTransactions = new ArrayList<>(transactions);
         filteredTransactions = filterTransactionsByDate(dateConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByTime(timeConfig, filteredTransactions);
