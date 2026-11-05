@@ -1,4 +1,5 @@
-# Project Title
+# Accounting Ledger
+A console app that stores a ledger in a CSV file and lets users add deposits, payments, and view history.
 
 <!-- HOW TO USE THIS TEMPLATE
      Save it as README.md at the root of your project, next to pom.xml. Replace every comment like this one
@@ -13,6 +14,7 @@
 
 <!-- Three to five sentences. What the application does, who uses it, what problem it solves.
      Write it for someone who has never seen the workbook: a recruiter, a classmate, you in six months. -->
+This application allows users to write and store deposits and payments into a transactions.csv file. Afterwards, it sorts the content in the file and allows the user to search through their ledger with specific constraints. Users can use predetermined constraints or create a custom filter with different search types.
 
 ## Features
 
@@ -22,10 +24,11 @@
      Example:
      - Shows every product in the store
      - Searches products by name (bonus) -->
-
--
--
--
+- Allows user to add a deposit or payment
+- Displays all entries, deposits, or payments in the ledger
+- Display a report through a predetermined constraint (Month to day, previous month, previous year, vendor, etc)
+- Display a report through a customized filter (Bonus)
+- Colors deposits, payments, and the app logo (Bonus)
 
 ## User Stories
 
@@ -33,8 +36,15 @@
      As a [type of user], I want [some goal] so that [some reason].
      Same text as the cards on your GitHub project board. -->
 
-- As a ..., I want ..., so that ...
-- As a ..., I want ..., so that ...
+- As a User, I should be able to make deposits, so that my ledger stays up to date.
+- As a User, I should be able to make payments, so that I can pay for items I purchase.
+- As a User, I should be able to see ledger information, so that I'm aware of my current balance and financial history.
+- As a User, I should be able to display all entries, so that I can see my transactions.
+- As a User, I should be able to filter my ledger, so that I can easily see specific transactions.
+- As a User, I should be able to run pre-defined reports to create a custom search, so that I can see my transactions during specific regions of time.
+- As a User, I should be able to create custom searches, so that I can create detailed filters for my transactions.
+- As a Product Creator, I should customize the app to have a more distinct feel, so that Users are more interested in my app and the app is distinct.
+- As an Owner, I should have a detailed README.md section, so that recruiters and anyone interested can get a gist of my project.
 
 ## Setup
 
@@ -48,8 +58,8 @@
 1. Clone this repository, or download it as a zip and unzip it.
 2. In IntelliJ: File > Open, pick the project folder (the one that holds `pom.xml`), press Open.
 3. Wait for IntelliJ to finish indexing (progress bar at the bottom).
-4. Open `src/main/java/com/pluralsight/YourMainClassName.java`. <!-- replace YourMainClassName with the class that has main -->
-5. Right-click inside the file and choose Run 'YourMainClassName.main()'.
+4. Open `src/main/java/com/pluralsight/FinancialTracker.java`. <!-- replace YourMainClassName with the class that has main -->
+5. Right-click inside the file and choose Run 'FinancialTracker.main()'.
 
 ### Data and configuration
 
@@ -60,7 +70,7 @@
      - `inventory.csv` sits at the project root, next to `pom.xml`. The program reads it at start.
      - `logs.txt` is created by the program at the project root on the first run. -->
 
--
+- `inventory.csv` sits at the project root, next to `pom.xml`. The program reads it at start. An inventory.csv file is created if none is found.
 
 ## Technologies Used
 
@@ -85,7 +95,7 @@
 
 ![Main menu](images/menu.png)
 
-![One feature in action](images/feature.png)
+![One feature in action](images/customsearch.png)
 
 ## A piece of code I am proud of
 
@@ -94,31 +104,47 @@
      demo day and what you talk about in an interview. -->
 
 ```java
-
+switch (input) {
+    // Start & End date, Inclusive v Exclusive v Inverse
+    case "1" -> queryDate(scanner, dateConfig);
+    // Start & End time, Inclusive v Exclusive
+    case "2" -> queryTime(scanner, timeConfig);
+    // Description Strict vs Loose
+    case "3" -> queryDesc(scanner, descConfig);
+    // Vendor Strict vs Loose
+    case "4" -> queryVendor(scanner, vendorConfig);
+    // Amount >, <, = within % range
+    case "5" -> queryAmount(scanner, amountConfig);
+    // Search
+    case "6" -> customSearch(dateConfig, timeConfig, descConfig, vendorConfig, amountConfig);
+    case "0" -> running = false;
+    default -> System.out.println("Invalid option");
+}
 ```
+This code queries users for information on their search filter. It asks for basic information and extra information such as search type, absolute value, etc.
 
 ## Future Work
 
 <!-- What you would add or fix next, one bullet each. Unfinished bonuses belong here. -->
 
--
--
+- Helper Classes. Methods that could be used across multiple classes such as ColoredString and GradientString could have been put here.
+- Condense more code. Both query and filter codes are nearly identical for each type of value they ask for. 
 
 ## Resources
 
 <!-- What helped you: the workbook, the week's hub pages, a tutorial, a documentation page. Real links. -->
 
 - Java YearUp Fall 2026 hub: <https://raymaroun.github.io/yearup-java-fall2026/>
--
+- AI (learning terminal coloring)
 
 ## Author
 
 <!-- Your name and, if you like, your GitHub profile link. For a team workshop, one line per person with what each one built. -->
 
-- **Your Name**
+- **Tony Zhang**
 
 ## Thanks
 
 <!-- Optional. The people who helped: the instructor, a classmate who debugged with you, a mentor. -->
 
-- Thank you to ... for ...
+- Thank you to Raymond for guidance
