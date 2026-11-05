@@ -83,7 +83,7 @@ public class FinancialTracker {
                 case "P" -> addPayment(scanner);
                 case "L" -> ledgerMenu(scanner);
                 case "X" -> running = false;
-                default -> System.out.println("Invalid option");
+                default -> System.out.println(coloredString("Invalid option", 145, 0, 0));
             }
         }
         scanner.close();
@@ -122,7 +122,7 @@ public class FinancialTracker {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
                 writer.close();
             } catch (Exception ex) {
-                System.out.println("Creating file failed: " + ex.getMessage());
+                System.out.println(coloredString("Creating file failed: " + ex.getMessage(), 145, 0, 0));
             }
         }
     }
@@ -142,7 +142,7 @@ public class FinancialTracker {
 
                 dateTime = LocalDateTime.parse(in, DATETIME_FMT);
             }  catch (Exception e) {
-                System.out.println("Invalid date and time: " + e.getMessage());
+                System.out.println(coloredString("Invalid date and time: " + e.getMessage(), 145, 0, 0));
             }
         }
         LocalDate date = dateTime.toLocalDate();
@@ -164,7 +164,7 @@ public class FinancialTracker {
             scanner.nextLine();
 
             if (amount <= 0) {
-                System.out.println("Must provide a positive amount.");
+                System.out.println(coloredString("Must provide a positive amount.", 145, 0, 0));
             }
         } while (amount <= 0);
 
@@ -238,7 +238,7 @@ public class FinancialTracker {
                 case "P" -> displayPayments();
                 case "R" -> reportsMenu(scanner);
                 case "H" -> running = false;
-                default -> System.out.println("Invalid option");
+                default -> System.out.println(coloredString("Invalid option", 145, 0, 0));
             }
         }
     }
@@ -367,7 +367,7 @@ public class FinancialTracker {
                 }
                 case "6" -> customSearchMenu(scanner);
                 case "0" -> running = false;
-                default -> System.out.println("Invalid option");
+                default -> System.out.println(coloredString("Invalid option", 145, 0, 0));
             }
         }
     }
@@ -692,7 +692,7 @@ public class FinancialTracker {
                 // Search
                 case "6" -> customSearch(dateConfig, timeConfig, descConfig, vendorConfig, amountConfig);
                 case "0" -> running = false;
-                default -> System.out.println("Invalid option");
+                default -> System.out.println(coloredString("Invalid option", 145, 0, 0));
             }
         }
     }
@@ -704,14 +704,14 @@ public class FinancialTracker {
         System.out.print("Start Date (yyyy-MM-dd): ");
         String startDate = scanner.nextLine();
         if (parseDate(startDate) == null && !startDate.isEmpty()) {
-            System.out.println("Invalid date");
+            System.out.println(coloredString("Invalid date", 145, 0, 0));
             return;
         }
 
         System.out.print("End Date (yyyy-MM-dd): ");
         String endDate = scanner.nextLine();
         if (parseDate(endDate) == null  && !endDate.isEmpty()) {
-            System.out.println("Invalid date");
+            System.out.println(coloredString("Invalid date", 145, 0, 0));
             return;
         }
 
@@ -728,7 +728,7 @@ public class FinancialTracker {
                 && !searchType.equalsIgnoreCase("Exclusive")
                 && !searchType.equalsIgnoreCase("Inverse")
                 && !searchType.isEmpty()) {
-            System.out.println("Invalid search type");
+            System.out.println(coloredString("Invalid search type", 145, 0, 0));
             return;
         }
 
@@ -748,14 +748,14 @@ public class FinancialTracker {
         System.out.print("Start Time (hh:mm:ss): ");
         String startTime = scanner.nextLine();
         if (parseTime(startTime) == null && !startTime.isEmpty()) {
-            System.out.println("Invalid time");
+            System.out.println(coloredString("Invalid time", 145, 0, 0));
             return;
         }
 
         System.out.print("End Time (hh:mm:ss): ");
         String endTime = scanner.nextLine();
         if (parseTime(endTime) == null && !endTime.isEmpty()) {
-            System.out.println("Invalid time");
+            System.out.println(coloredString("Invalid time", 145, 0, 0));
             return;
         }
 
@@ -772,7 +772,7 @@ public class FinancialTracker {
                 && !searchType.equalsIgnoreCase("Exclusive")
                 && !searchType.equalsIgnoreCase("Inverse")
                 && !searchType.isEmpty()) {
-            System.out.println("Invalid search type");
+            System.out.println(coloredString("Invalid search type", 145, 0, 0));
             return;
         }
 
@@ -804,7 +804,7 @@ public class FinancialTracker {
                 && !searchType.equalsIgnoreCase("Inverse Loose")
                 && !searchType.equalsIgnoreCase("Inverse Strict")
                 && !searchType.isEmpty()) {
-            System.out.println("Invalid search type");
+            System.out.println(coloredString("Invalid search type", 145, 0, 0));
             return;
         }
 
@@ -835,7 +835,7 @@ public class FinancialTracker {
                 && !searchType.equalsIgnoreCase("Inverse Loose")
                 && !searchType.equalsIgnoreCase("Inverse Strict")
                 && !searchType.isEmpty()) {
-            System.out.println("Invalid search type");
+            System.out.println(coloredString("Invalid search type", 145, 0, 0));
             return;
         }
 
@@ -863,7 +863,7 @@ public class FinancialTracker {
         String searchType = scanner.nextLine();
         if (!searchType.equalsIgnoreCase("<") && !searchType.equalsIgnoreCase(">")
                 && !searchType.equalsIgnoreCase("=") && !searchType.isEmpty()) {
-            System.out.println("Invalid search type");
+            System.out.println(coloredString("Invalid search type", 145, 0, 0));
             return;
         } else if (searchType.equalsIgnoreCase("=")) {
             System.out.print("Range % (number only): ");
@@ -871,7 +871,7 @@ public class FinancialTracker {
             searchType = searchType.replace("%", "");
             searchType = searchType.replace(" ", "");
             if(parseDouble(searchType) == null) {
-                System.out.println("Invalid range");
+                System.out.println(coloredString("Invalid range", 145, 0, 0));
                 return;
             }
         }
@@ -879,7 +879,7 @@ public class FinancialTracker {
         System.out.print("Absolute Value (true/false): ");
         String abs = scanner.nextLine();
         if (!abs.isEmpty() && !abs.equalsIgnoreCase("true") && !abs.equalsIgnoreCase("false")) {
-            System.out.println("Invalid absolute value type");
+            System.out.println(coloredString("Invalid absolute value type", 145, 0, 0));
             return;
         }
 
@@ -898,7 +898,11 @@ public class FinancialTracker {
         filteredTransactions = filterTransactionsByVendor(vendorConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByAmount(amountConfig, filteredTransactions);
 
-        displayTransactions(filteredTransactions);
+        if (filteredTransactions.isEmpty()) {
+            System.out.println(coloredString("No transactions found!", 145, 0, 0));
+        } else {
+            displayTransactions(filteredTransactions);
+        }
     }
 
     /* ------------------------------------------------------------------
