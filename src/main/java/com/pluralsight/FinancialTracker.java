@@ -176,6 +176,7 @@ public class FinancialTracker {
                 + " for " + transaction.getDescription()
                 + " by " + transaction.getVendor()
                 + " logged.");
+
         transactions.add(transaction);
         sortByDateTime(transactions);
         appendTransaction(transaction);
@@ -287,7 +288,7 @@ public class FinancialTracker {
                 }
                 case "2" -> { // previous month report
                     int currentMonth = LocalDate.now().getMonthValue();
-                    int month = (currentMonth - 1) % 12;
+                    int month = LocalDate.now().minusMonths(1).getMonthValue();
                     int year;
                     if (currentMonth - 1 > 0) { // check last month was this year
                         year = LocalDate.now().getYear();
@@ -857,6 +858,7 @@ public class FinancialTracker {
     }
 
     private static void customSearch(String[] dateConfig, String[] timeConfig, String[] descConfig, String[] vendorConfig, String[] amountConfig) {
+        // loops over the array multiple times, one pass through the array with a lot of if statements or Predicate would be better, but for readability I went with this solution
         ArrayList<Transaction> filteredTransactions = new ArrayList<>(transactions);
         filteredTransactions = filterTransactionsByDate(dateConfig, filteredTransactions);
         filteredTransactions = filterTransactionsByTime(timeConfig, filteredTransactions);
