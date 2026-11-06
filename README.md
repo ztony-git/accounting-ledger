@@ -130,12 +130,14 @@ This code queries users for information on their search filter. It asks for basi
 - Helper Classes. Methods that could be used across multiple classes such as ColoredString and GradientString could have been put here.
 - Condense more code. Both query and filter codes are nearly identical for each type of value they ask for. 
 - Create subissues in GitHub rather than adding items
+- Use Predicates to filter instead of looping through the array multiple times (looped through array for readability & transaction.csv file is small, otherwise would've passed array once through multiple if statements)
 
 ## Resources
 
 <!-- What helped you: the workbook, the week's hub pages, a tutorial, a documentation page. Real links. -->
 
 - Java YearUp Fall 2026 hub: <https://raymaroun.github.io/yearup-java-fall2026/>
+- Java Oracle Documentation: <https://docs.oracle.com/javase/8/docs/api/overview-summary.html>
 - AI (learning terminal coloring)
 
 ## Author
