@@ -921,10 +921,6 @@ public class FinancialTracker {
         StringBuilder sb = new StringBuilder();
 
         for (int c = 0; c < string.length(); c++) {
-            if (string.charAt(c) == ' ') {
-                sb.append(' ');
-                continue;
-            }
             sb.append("\033[38;2;").append(r).append(';')
                     .append(g).append(';').append(b).append('m');
             sb.append(string.charAt(c));
@@ -940,11 +936,6 @@ public class FinancialTracker {
         int length = string.length();
 
         for(int c = 0; c < length; c++) {
-            if (string.charAt(c) == ' ') {
-                sb.append(' ');
-                continue;
-            }
-
             double t = (double) c / length;
 
             int r = (int) (startColors[0] * (1 - t) + endColors[0] * t);
